@@ -1,5 +1,38 @@
-import { map } from './index';
-import { addTwo } from '../challenge1/index.js';
+import { addTwo, addS, map } from './index';
+
+describe('addTwo', () => {
+  it('should return 3 when it is passed 1 as argument, adding 2 to the value', () => {
+    const result = addTwo(1);
+
+    expect(result).toBe(3);
+  });
+
+  it('should return 0 when it is passed -2 as argument, adding 2 to the value', () => {
+    const result = addTwo(-2);
+
+    expect(result).toBe(0);
+  });
+
+  it('should return 10 when it is passed 8 as argument, adding 2 to the value', () => {
+    const result = addTwo(8);
+
+    expect(result).toBe(10);
+  });
+});
+
+describe('addS', () => {
+  it('should return tests when it is passed test as argument', () => {
+    const result = addS('test');
+
+    expect(result).toBe('tests');
+  });
+
+  it('should return s when it is passed an empty string as argument', () => {
+    const result = addS('');
+
+    expect(result).toBe('s');
+  });
+});
 
 describe('map', () => {
   it('should return an array with duplicated numbers when its passed an array of number and a callback function that should change all items numbers, e.g. duplicate', () => {
