@@ -20,15 +20,48 @@ export const map = (items, callback) => {
 };
 
 // Challenge 4
-const forEach = (array, callback) => {};
+export const forEach = (array, callback) => {
+  const forLoop = (items, index) => {
+    if (index === items.length) {
+      return;
+    }
 
-// See for yourself if your forEach works!
+    callback(items[index]);
+
+    forLoop(items, index + 1);
+  };
+
+  forLoop(array, 0);
+};
 
 // Challenge 5
-const mapWith = (array, callback) => {};
+export const mapWith = (array, callback) => {
+  let newArray = [];
+
+  const addNewItem = (item) => {
+    const newItem = callback(item);
+    newArray = [...newArray, newItem];
+  };
+
+  forEach(array, addNewItem);
+
+  return newArray;
+};
 
 // Challenge 6
-const reduce = (array, callback, initialValue) => {};
+export const reduce = (array, callback, initialValue) => {
+  const loop = (items, callback, value, index) => {
+    if (index === items.length) {
+      return value;
+    }
+
+    const newValue = callback(value, items[index]);
+
+    return loop(items, callback, newValue, index + 1);
+  };
+
+  return loop(array, callback, initialValue, 0);
+};
 
 // Challenge 7
 const intersection = (arrays) => {};
