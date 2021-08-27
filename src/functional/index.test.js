@@ -1,4 +1,14 @@
-import { addTwo, addS, map, forEach, mapWith, reduce } from './index';
+import {
+  addTwo,
+  addS,
+  map,
+  forEach,
+  mapWith,
+  reduce,
+  intersection,
+  union,
+  objOfMatches,
+} from './index';
 
 describe('addTwo', () => {
   it('should return 3 when it is passed 1 as argument, adding 2 to the value', () => {
@@ -115,5 +125,46 @@ describe('reduce', () => {
     const result = reduce(items, add, 0);
 
     expect(result).toBe(8);
+  });
+});
+
+describe('intersection', () => {
+  it('should return the items that exists in all arrays with 2 arrays as arguments', () => {
+    const array1 = [4, 1, 3];
+    const array2 = [1, 4, 10, 5, 6];
+
+    const result = intersection(array1, array2);
+
+    expect(result).toEqual([1, 4]);
+  });
+
+  it('should return the items that exists in all arrays with 3 arrays as arguments', () => {
+    const result = intersection(
+      [5, 10, 15, 20],
+      [15, 88, 1, 5, 7],
+      [1, 10, 15, 5, 20]
+    );
+
+    expect(result).toStrictEqual([15, 5]);
+  });
+});
+
+describe('union', () => {
+  it('should return a new array with all items, ignoring duplicated values', () => {
+    const result = union([5, 10, 15], [15, 88, 1, 5, 7], [100, 15, 10, 1, 5]);
+
+    expect(result).toEqual([5, 10, 15, 88, 1, 7, 100]);
+  });
+});
+
+describe('objOfMatches', () => {
+  it('should return a new array with all items, ignoring duplicated values', () => {
+    const result = objOfMatches(
+      ['hi', 'howdy', 'bye', 'later', 'hello'],
+      ['HI', 'Howdy', 'BYE', 'LATER', 'hello'],
+      (str) => str.toUpperCase()
+    );
+
+    expect(result).toEqual({ hi: 'HI', bye: 'BYE', later: 'LATER' });
   });
 });

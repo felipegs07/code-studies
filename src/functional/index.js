@@ -64,22 +64,82 @@ export const reduce = (array, callback, initialValue) => {
 };
 
 // Challenge 7
-const intersection = (arrays) => {};
+const has = (array, comparisonItem) => {
+  let status = false;
 
-// console.log(intersection([5, 10, 15, 20], [15, 88, 1, 5, 7], [1, 10, 15, 5, 20]));
-// should log: [5, 15]
+  const verify = (item) => {
+    if (status === false && item === comparisonItem) {
+      status = true;
+    }
+  };
+
+  forEach(array, verify);
+
+  return status;
+};
+
+export const intersection = (...arrays) => {
+  const loopIntersection = (array, index, value) => {
+    if (index === arrays.length) {
+      return value;
+    }
+
+    const verifyIntersection = (accumulator, nextItem) => {
+      const itemIsIntersection = has(value, nextItem);
+
+      return itemIsIntersection ? [...accumulator, nextItem] : accumulator;
+    };
+
+    const newValue = reduce(array, verifyIntersection, []);
+
+    const nextIndex = index + 1;
+
+    return loopIntersection(arrays[nextIndex], nextIndex, newValue);
+  };
+
+  return loopIntersection(arrays[1], 1, arrays[0]);
+};
 
 // Challenge 8
-const union = (arrays) => {};
+export const union = (...arrays) => {
+  const loopUnion = (array, index, value) => {
+    if (index === arrays.length) {
+      return value;
+    }
 
-// console.log(union([5, 10, 15], [15, 88, 1, 5, 7], [100, 15, 10, 1, 5]));
-// should log: [5, 10, 15, 88, 1, 7, 100]
+    const verifyDuplicatedValue = (accumulator, nextItem) => {
+      const itemExists = has(accumulator, nextItem);
+
+      return itemExists ? accumulator : [...accumulator, nextItem];
+    };
+
+    const newValue = reduce(array, verifyDuplicatedValue, value);
+
+    const nextIndex = index + 1;
+
+    return loopUnion(arrays[nextIndex], nextIndex, newValue);
+  };
+
+  return loopUnion(arrays[1], 1, arrays[0]);
+};
 
 // Challenge 9
-const objOfMatches = (array1, array2, callback) => {};
+export const objOfMatches = (array1, array2, callback) => {
+  let object = {};
 
-// console.log(objOfMatches(['hi', 'howdy', 'bye', 'later', 'hello'], ['HI', 'Howdy', 'BYE', 'LATER', 'hello'], (str) => str.toUpperCase()));
-// should log: { hi: 'HI', bye: 'BYE', later: 'LATER' }
+  for (let i = 0; i < array1.length; i++) {
+    const itemConverted = callback(array1[i]);
+
+    if (itemConverted === array2[i]) {
+      object = {
+        ...object,
+        [array1[i]]: array2[i],
+      };
+    }
+  }
+
+  return object;
+};
 
 // Challenge 10
 const multiMap = (arrVals, arrCallbacks) => {};
