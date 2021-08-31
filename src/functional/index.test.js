@@ -13,6 +13,7 @@ import {
   objFilter,
   rating,
   pipe,
+  highestFunc,
 } from './index';
 
 describe('addTwo', () => {
@@ -253,5 +254,22 @@ describe('pipe', () => {
     const result = pipe(capAddlowRepeat, 'cat');
 
     expect(result).toBe('CATcatCATcat');
+  });
+});
+
+describe('highestFunc', () => {
+  it(`should return the value, after pass in all functions of argument, using the result from one as argument to another`, () => {
+    const groupOfFuncs = {};
+    groupOfFuncs.double = (n) => n * 2;
+    groupOfFuncs.addTen = (n) => n + 10;
+    groupOfFuncs.inverse = (n) => n * -1;
+
+    const result1 = highestFunc(groupOfFuncs, 5);
+    const result2 = highestFunc(groupOfFuncs, 11);
+    const result3 = highestFunc(groupOfFuncs, -20);
+
+    expect(result1).toBe('addTen');
+    expect(result2).toBe('double');
+    expect(result3).toBe('inverse');
   });
 });

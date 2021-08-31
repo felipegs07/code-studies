@@ -235,4 +235,22 @@ export const pipe = (arrOfFuncs, value) => {
 };
 
 // Challenge 15
-const highestFunc = (objOfFuncs, subject) => {};
+export const highestFunc = (objOfFuncs, subject) => {
+  let actualFunc = null;
+  let actualValue = null;
+  const keys = Object.keys(objOfFuncs);
+
+  forEach(keys, (key) => {
+    const newValue = objOfFuncs[key](subject);
+
+    if (actualValue === null) {
+      actualFunc = key;
+      actualValue = newValue;
+    } else if (newValue > actualValue) {
+      actualFunc = key;
+      actualValue = newValue;
+    }
+  });
+
+  return actualFunc;
+};
