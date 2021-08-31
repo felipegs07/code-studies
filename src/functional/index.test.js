@@ -8,6 +8,11 @@ import {
   intersection,
   union,
   objOfMatches,
+  multiMap,
+  commutative,
+  objFilter,
+  rating,
+  pipe,
 } from './index';
 
 describe('addTwo', () => {
@@ -166,5 +171,87 @@ describe('objOfMatches', () => {
     );
 
     expect(result).toEqual({ hi: 'HI', bye: 'BYE', later: 'LATER' });
+  });
+});
+
+describe('multiMap', () => {
+  it(`should return a new object, with each value of the array being the key, and the value being an array
+      of the key changed by the second argument, an array of callbacks`, () => {
+    const result = multiMap(
+      ['catfood', 'glue', 'beer'],
+      [
+        (str) => str.toUpperCase(),
+        (str) => str[0].toUpperCase() + str.slice(1).toLowerCase(),
+        (str) => str + str,
+      ]
+    );
+
+    expect(result).toEqual({
+      catfood: ['CATFOOD', 'Catfood', 'catfoodcatfood'],
+      glue: ['GLUE', 'Glue', 'glueglue'],
+      beer: ['BEER', 'Beer', 'beerbeer'],
+    });
+  });
+});
+
+describe('commutative', () => {
+  const multBy3 = (n) => n * 3;
+  const divBy4 = (n) => n / 4;
+  const subtract5 = (n) => n - 5;
+
+  it('should return true if the value, after being executed by the two callbacks in an order and then reversed, the result is the same', () => {
+    const result = commutative(multBy3, divBy4, 11);
+
+    expect(result).toBe(true);
+  });
+
+  it('should return false if the value, after being executed by the two callbacks in an order and then reversed, the result is not the same', () => {
+    const result = commutative(multBy3, subtract5, 48);
+
+    expect(result).toBe(false);
+  });
+});
+
+describe('objFilter', () => {
+  it(`should filter the object keys and return in the new object, if the result of the call of callback
+      function with the key as argument is equal than the original value of that key.`, () => {
+    const startingObj = {};
+    startingObj[6] = 3;
+    startingObj[2] = 1;
+    startingObj[12] = 4;
+    const half = (n) => n / 2;
+
+    const result = objFilter(startingObj, half);
+
+    expect(result).toEqual({ 2: 1, 6: 3 });
+  });
+});
+
+describe('rating', () => {
+  it(`should the porcentage of function that returned true, based on the value argument`, () => {
+    const isEven = (n) => n % 2 === 0;
+    const greaterThanFour = (n) => n > 4;
+    const isSquare = (n) => Math.sqrt(n) % 1 === 0;
+    const hasSix = (n) => n.toString().includes('6');
+    const checks = [isEven, greaterThanFour, isSquare, hasSix];
+
+    const result1 = rating(checks, 64);
+    const result2 = rating(checks, 66);
+
+    expect(result1).toBe(100);
+    expect(result2).toBe(75);
+  });
+});
+
+describe('pipe', () => {
+  it(`should return the value, after pass in all functions of argument, using the result from one as argument to another`, () => {
+    const capitalize = (str) => str.toUpperCase();
+    const addLowerCase = (str) => str + str.toLowerCase();
+    const repeat = (str) => str + str;
+    const capAddlowRepeat = [capitalize, addLowerCase, repeat];
+
+    const result = pipe(capAddlowRepeat, 'cat');
+
+    expect(result).toBe('CATcatCATcat');
   });
 });

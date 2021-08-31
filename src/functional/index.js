@@ -142,54 +142,97 @@ export const objOfMatches = (array1, array2, callback) => {
 };
 
 // Challenge 10
-const multiMap = (arrVals, arrCallbacks) => {};
+export const multiMap = (arrVals, arrCallbacks) => {
+  const runCallbacks = (callbacks, input) => {
+    let finalValue = [];
 
-// console.log(multiMap(['catfood', 'glue', 'beer'], [(str) => str.toUpperCase(), (str) => str[0].toUpperCase() + str.slice(1).toLowerCase(), (str) => str + str]));
-// should log: { catfood: ['CATFOOD', 'Catfood', 'catfoodcatfood'], glue: ['GLUE', 'Glue', 'glueglue'], beer: ['BEER', 'Beer', 'beerbeer'] }
+    forEach(callbacks, (callback) => {
+      finalValue = [...finalValue, callback(input)];
+    });
+
+    return finalValue;
+  };
+
+  const addObjectKeys = (accumulator, item) => {
+    const objectWithNewKey = {
+      ...accumulator,
+      [item]: runCallbacks(arrCallbacks, item),
+    };
+
+    return objectWithNewKey;
+  };
+
+  const returnObject = reduce(arrVals, addObjectKeys, {});
+
+  return returnObject;
+};
 
 // Challenge 11
-const commutative = (func1, func2, value) => {};
+export const commutative = (func1, func2, value) => {
+  const executeInOrder = (callbackA, callbackB, inputValue) => {
+    const temporaryValue = callbackA(inputValue);
+    const finalValue = callbackB(temporaryValue);
 
-// /*** Uncomment these to check your work! ***/
-// const multBy3 = n => n * 3;
-// const divBy4 = n => n / 4;
-// const subtract5 = n => n - 5;
-// console.log(commutative(multBy3, divBy4, 11)); // should log: true
-// console.log(commutative(multBy3, subtract5, 10)); // should log: false
-// console.log(commutative(divBy4, subtract5, 48)); // should log: false
+    return finalValue;
+  };
+
+  const firstResult = executeInOrder(func1, func2, value);
+  const secondResult = executeInOrder(func2, func1, value);
+
+  return firstResult === secondResult;
+};
 
 // Challenge 12
-const objFilter = (obj, callback) => {};
+export const objFilter = (obj, callback) => {
+  const keys = Object.keys(obj);
 
-// /*** Uncomment these to check your work! ***/
-// const startingObj = {};
-// startingObj[6] = 3;
-// startingObj[2] = 1;
-// startingObj[12] = 4;
-// const half = n => n / 2;
-// console.log(objFilter(startingObj, half)); // should log: { 2: 1, 6: 3 }
+  const newObject = reduce(
+    keys,
+    (accumulator, item) => {
+      const result = callback(item);
+
+      return result === obj[item]
+        ? {
+            ...accumulator,
+            [item]: result,
+          }
+        : accumulator;
+    },
+    {}
+  );
+
+  return newObject;
+};
 
 // Challenge 13
-const rating = (arrOfFuncs, value) => {};
+export const rating = (arrOfFuncs, value) => {
+  let trueReturns = 0;
 
-// /*** Uncomment these to check your work! ***/
-// const isEven = n => n % 2 === 0;
-// const greaterThanFour = n => n > 4;
-// const isSquare = n => Math.sqrt(n) % 1 === 0;
-// const hasSix = n => n.toString().includes('6');
-// const checks = [isEven, greaterThanFour, isSquare, hasSix];
-// console.log(rating(checks, 64)); // should log: 100
-// console.log(rating(checks, 66)); // should log: 75
+  forEach(arrOfFuncs, (callback) => {
+    const callbackReturn = callback(value);
+
+    if (callbackReturn === true) {
+      trueReturns += 1;
+    }
+  });
+
+  const percentage = (trueReturns / arrOfFuncs.length) * 100;
+
+  return percentage;
+};
 
 // Challenge 14
-const pipe = (arrOfFuncs, value) => {};
+export const pipe = (arrOfFuncs, value) => {
+  const newValue = reduce(
+    arrOfFuncs,
+    (accumulator, callback) => {
+      return callback(accumulator);
+    },
+    value
+  );
 
-// /*** Uncomment these to check your work! ***/
-// const capitalize = str => str.toUpperCase();
-// const addLowerCase = str => str + str.toLowerCase();
-// const repeat = str => str + str;
-// const capAddlowRepeat = [capitalize, addLowerCase, repeat];
-// console.log(pipe(capAddlowRepeat, 'cat')); // should log: 'CATcatCATcat'
+  return newValue;
+};
 
 // Challenge 15
 const highestFunc = (objOfFuncs, subject) => {};
