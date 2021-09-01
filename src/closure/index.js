@@ -1,18 +1,8 @@
 // Challenge 1
-const createFunction = () => {};
-
-// UNCOMMENT THESE TO TEST YOUR WORK!
-// const function1 = createFunction();
-// function1();
+export const createFunction = () => () => console.log('hello');
 
 // Challenge 2
-const createFunctionPrinter = (input) => {};
-
-// UNCOMMENT THESE TO TEST YOUR WORK!
-// const printSample = createFunctionPrinter('sample');
-// printSample();
-// const printHello = createFunctionPrinter('hello');
-// printHello();
+export const createFunctionPrinter = (input) => () => console.log(input);
 
 // Challenge 3
 const outer = () => {
