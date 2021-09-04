@@ -28,7 +28,7 @@ const jasCounter = outer();
 // willCounter();
 
 // Challenge 4
-const addByX = (x) => {};
+export const addByX = (x) => (y) => y + x;
 
 const addByTwo = addByX(2);
 
@@ -37,50 +37,81 @@ const addByTwo = addByX(2);
 // now call addByTwo with an input of 2
 
 // Challenge 5
-const once = (func) => {};
+export const once = (func) => {
+  let value = undefined;
+  let isFirstTime = false;
 
-const onceFunc = once(addByTwo);
+  return (x) => {
+    if (isFirstTime === false) {
+      value = func(x);
+      isFirstTime = true;
+    }
 
-// UNCOMMENT THESE TO TEST YOUR WORK!
-// console.log(onceFunc(4));  //should log 6
-// console.log(onceFunc(10));  //should log 6
-// console.log(onceFunc(9001));  //should log 6
+    return value;
+  };
+};
 
 // Challenge 6
-const after = (count, func) => {};
+export const after = (count, func) => {
+  let internalCounter = 0;
 
-const called = () => console.log('hello');
-const afterCalled = after(3, called);
+  return () => {
+    internalCounter += 1;
 
-// afterCalled(); // -> nothing is printed
-// afterCalled(); // -> nothing is printed
-// afterCalled(); // -> 'hello' is printed
+    if (internalCounter === count) {
+      func();
+    }
+  };
+};
 
 // Challenge 7
-const delay = (func, wait) => {};
+export const delay = (func, wait, ...args) => {
+  return () => {
+    setTimeout(() => {
+      func(args);
+    }, wait);
+  };
+};
 
 // Challenge 8
-const russianRoulette = (num) => {};
+export const russianRoulette = (num) => {
+  let counter = 0;
 
-// /*** Uncomment these to check your work! ***/
-// const play = russianRoulette(3);
-// console.log(play()); // should log: 'click'
-// console.log(play()); // should log: 'click'
-// console.log(play()); // should log: 'bang'
-// console.log(play()); // should log: 'reload to play again'
-// console.log(play()); // should log: 'reload to play again'
+  return () => {
+    counter += 1;
+
+    if (counter < num) {
+      return 'click';
+    } else if (counter === num) {
+      return 'bang';
+    } else {
+      return 'reload to play again';
+    }
+  };
+};
 
 // Challenge 9
-const average = () => {};
+export const average = () => {
+  let numbers = [];
+  let lastAverage = 0;
 
-// /*** Uncomment these to check your work! ***/
-// const avgSoFar = average();
-// console.log(avgSoFar()); // should log: 0
-// console.log(avgSoFar(4)); // should log: 4
-// console.log(avgSoFar(8)); // should log: 6
-// console.log(avgSoFar()); // should log: 6
-// console.log(avgSoFar(12)); // should log: 8
-// console.log(avgSoFar()); // should log: 8
+  return (newNumber) => {
+    if (newNumber != undefined) {
+      numbers = [...numbers, newNumber];
+    } else {
+      return lastAverage;
+    }
+
+    const numbersSum = numbers.reduce((accumulator, item) => {
+      return accumulator + item;
+    }, 0);
+
+    const newAverage = numbersSum / numbers.length;
+    lastAverage = newAverage;
+
+    return newAverage;
+  };
+};
 
 // Challenge 10
 const makeFuncTester = (arrOfTests) => {};
