@@ -5,8 +5,8 @@ export const createFunction = () => () => console.log('hello');
 export const createFunctionPrinter = (input) => () => console.log(input);
 
 // Challenge 3
-const outer = () => {
-  let counter = 0; // this variable is outside incrementCounter's scope
+export const outer = () => {
+  let counter = 0;
   const incrementCounter = () => {
     counter++;
     console.log('counter', counter);
@@ -14,27 +14,8 @@ const outer = () => {
   return incrementCounter;
 };
 
-const willCounter = outer();
-const jasCounter = outer();
-
-// Uncomment each of these lines one by one.
-// Before your do, guess what will be logged from each function call.
-
-// willCounter();
-// willCounter();
-// willCounter();
-
-// jasCounter();
-// willCounter();
-
 // Challenge 4
 export const addByX = (x) => (y) => y + x;
-
-const addByTwo = addByX(2);
-
-// now call addByTwo with an input of 1
-
-// now call addByTwo with an input of 2
 
 // Challenge 5
 export const once = (func) => {
@@ -114,66 +95,97 @@ export const average = () => {
 };
 
 // Challenge 10
-const makeFuncTester = (arrOfTests) => {};
+export const makeFuncTester = (arrOfTests) => {
+  return (callback) => {
+    for (let i = 0; i < arrOfTests.length; i++) {
+      const [itemA, itemB] = arrOfTests[i];
+      const itemAAfterCallback = callback(itemA);
 
-// /*** Uncomment these to check your work! ***/
-// const capLastTestCases = [];
-// capLastTestCases.push(['hello', 'hellO']);
-// capLastTestCases.push(['goodbye', 'goodbyE']);
-// capLastTestCases.push(['howdy', 'howdY']);
-// const shouldCapitalizeLast = makeFuncTester(capLastTestCases);
-// const capLastAttempt1 = str => str.toUpperCase();
-// const capLastAttempt2 = str => str.slice(0, -1) + str.slice(-1).toUpperCase();
-// console.log(shouldCapitalizeLast(capLastAttempt1)); // should log: false
-// console.log(shouldCapitalizeLast(capLastAttempt2)); // should log: true
+      if (itemAAfterCallback !== itemB) {
+        return false;
+      }
+    }
+
+    return true;
+  };
+};
 
 // Challenge 11
-const makeHistory = (limit) => {};
+export const makeHistory = (limit) => {
+  let items = [];
 
-// /*** Uncomment these to check your work! ***/
-// const myActions = makeHistory(2);
-// console.log(myActions('jump')); // should log: 'jump done'
-// console.log(myActions('undo')); // should log: 'jump undone'
-// console.log(myActions('walk')); // should log: 'walk done'
-// console.log(myActions('code')); // should log: 'code done'
-// console.log(myActions('pose')); // should log: 'pose done'
-// console.log(myActions('undo')); // should log: 'pose undone'
-// console.log(myActions('undo')); // should log: 'code undone'
-// console.log(myActions('undo')); // should log: 'nothing to undo'
+  const formatItemName = (name, status) => {
+    return status === true ? `${name} done` : `${name} undone`;
+  };
+
+  const addItem = (item) => {
+    if (items.length < limit) {
+      items = [...items, item];
+    } else {
+      const oldItemsWithoutLastItem = items.slice(1, limit);
+
+      items = [...oldItemsWithoutLastItem, item];
+    }
+
+    return formatItemName(item, true);
+  };
+
+  const removeItem = (item) => {
+    const lastItemIndex = items.length - 1;
+    const newItems = items.slice(0, lastItemIndex);
+    items = [...newItems];
+
+    return formatItemName(item, false);
+  };
+
+  return (command) => {
+    if (command === 'undo') {
+      if (items.length === 0) {
+        return 'nothing to undo';
+      }
+
+      const lastItemIndex = items.length - 1;
+      const lastItem = items[lastItemIndex];
+
+      return removeItem(lastItem);
+    } else {
+      return addItem(command);
+    }
+  };
+};
 
 // Challenge 12
-const blackjack = (array) => {};
+export const blackjack = (array) => {
+  let index = 0;
+  let playersIndex = 0;
+  const players = {};
 
-// /*** Uncomment these to check your work! ***/
+  return (item1, item2) => {
+    const initialValue = item1 + item2;
+    players[playersIndex] = initialValue;
+    const playerReference = playersIndex;
+    playersIndex += 1;
+    let firstCall = true;
 
-// /*** DEALER ***/
-// const deal = blackjack([2, 6, 1, 7, 11, 4, 6, 3, 9, 8, 9, 3, 10, 4, 5, 3, 7, 4, 9, 6, 10, 11]);
+    return () => {
+      const actualPlayerValue = players[playerReference];
 
-// /*** PLAYER 1 ***/
-// const i_like_to_live_dangerously = deal(4, 5);
-// console.log(i_like_to_live_dangerously()); // should log: 9
-// console.log(i_like_to_live_dangerously()); // should log: 11
-// console.log(i_like_to_live_dangerously()); // should log: 17
-// console.log(i_like_to_live_dangerously()); // should log: 18
-// console.log(i_like_to_live_dangerously()); // should log: 'bust'
-// console.log(i_like_to_live_dangerously()); // should log: 'you are done!'
-// console.log(i_like_to_live_dangerously()); // should log: 'you are done!'
+      if (firstCall === true) {
+        firstCall = false;
+        return initialValue;
+      }
 
-// /*** BELOW LINES ARE FOR THE BONUS ***/
+      if (actualPlayerValue > 21) {
+        return 'you are done!';
+      } else {
+        const actualItem = array[index];
+        const newValue = actualItem + actualPlayerValue;
+        index += 1;
 
-// /*** PLAYER 2 ***/
-// const i_TOO_like_to_live_dangerously = deal(2, 2);
-// console.log(i_TOO_like_to_live_dangerously()); // should log: 4
-// console.log(i_TOO_like_to_live_dangerously()); // should log: 15
-// console.log(i_TOO_like_to_live_dangerously()); // should log: 19
-// console.log(i_TOO_like_to_live_dangerously()); // should log: 'bust'
-// console.log(i_TOO_like_to_live_dangerously()); // should log: 'you are done!
-// console.log(i_TOO_like_to_live_dangerously()); // should log: 'you are done!
+        players[playerReference] = newValue;
 
-// /*** PLAYER 3 ***/
-// const i_ALSO_like_to_live_dangerously = deal(3, 7);
-// console.log(i_ALSO_like_to_live_dangerously()); // should log: 10
-// console.log(i_ALSO_like_to_live_dangerously()); // should log: 13
-// console.log(i_ALSO_like_to_live_dangerously()); // should log: 'bust'
-// console.log(i_ALSO_like_to_live_dangerously()); // should log: 'you are done!
-// console.log(i_ALSO_like_to_live_dangerously()); // should log: 'you are done!
+        return newValue > 21 ? 'bust' : newValue;
+      }
+    };
+  };
+};
