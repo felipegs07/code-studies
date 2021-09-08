@@ -1,22 +1,36 @@
+import { reduce } from '../functional/index';
+
 // Challenge 1
-const functionValidator = (funcArr, input, output) => {};
+export const functionValidator = (funcArr, input, output) => {
+  const newFuncArr = reduce(
+    funcArr,
+    (accumulator, item) => {
+      const result = item(input);
 
-// const addFive = num => num + 5;
-// const multiplyByTwo = num => num * 2;
-// const subtractOne = num => num - 1;
-// const fnArr = [addFive, multiplyByTwo, subtractOne];
+      return result === output ? [...accumulator, item] : accumulator;
+    },
+    []
+  );
 
-// console.log(functionValidator(fnArr, 5, 10)) // should log [num => num + 5, num => num * 2]
+  return newFuncArr;
+};
 
 // Challenge 2
-const allClear = (funcArr, value) => {};
+export const allClear = (funcArr, value) => {
+  const response = reduce(
+    funcArr,
+    (lastValue, actualFunc) => {
+      if (lastValue !== false) {
+        return actualFunc(value);
+      }
 
-// const isOdd = num => num % 2 === 1;
-// const isPositive = num => num > 0;
-// const multipleOfFive = num => num % 5 === 0;
-// const numFnArr = [isOdd, isPositive, multipleOfFive];
-// console.log(allClear(numFnArr, 25)) // should log true
-// console.log(allClear(numFnArr, -25)) // should log false
+      return lastValue;
+    },
+    true
+  );
+
+  return response;
+};
 
 // Challenge 3
 const numSelectString = (numArr) => {};
