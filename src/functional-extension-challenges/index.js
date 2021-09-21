@@ -33,23 +33,37 @@ export const allClear = (funcArr, value) => {
 };
 
 // Challenge 3
-const numSelectString = (numArr) => {};
+export const numSelectString = (numArr) => {
+  const oddNumbers = numArr
+    .filter((number) => number % 2 !== 0)
+    .sort((a, b) => {
+      return a - b;
+    });
 
-// const nums = [17, 34, 3, 12]
-// console.log(numSelectString(nums)) // should log "3, 17"
+  const selectedString = oddNumbers.reduce((accumulator, item) => {
+    return accumulator ? `${accumulator}, ${item}` : `${item}`;
+  }, '');
+
+  return selectedString;
+};
 
 // Challenge 4
-const movieSelector = (moviesArr) => {};
+export const movieSelector = (moviesArr) => {
+  const movies = moviesArr
+    .filter((item) => {
+      return item.score > 5;
+    })
+    .reduce((accumulator, item) => {
+      const uppercaseTitle = item.title.toUpperCase();
+      return [...accumulator, uppercaseTitle];
+    }, []);
 
-// const movies = [ { id: 1, title: "Pan's Labyrinth", score: 9 }, { id: 37, title: "Manos: The Hands of Fate", score: 2 }, { title: "Air Bud", score: 5 }, { title: "Hackers", score: 7 } ]
-// console.log(movieSelector(movies)) // should log [ "PAN'S LABYRINTH", "HACKERS" ]
+  return movies;
+};
 
 // Challenge 5
-const curriedAddThreeNums = (num1) => {};
-
-// console.log(curriedAddThreeNums(3)(-1)(1)); // should log 3
+export const curriedAddThreeNums = (num1) => (num2) => (num3) =>
+  num1 + num2 + num3;
 
 // Challenge 6
-// const curriedAddTwoNumsToFive = ?
-
-// console.log(curriedAddTwoNumsToFive(6)(7)) // should log 18
+export const curriedAddTwoNumsToFive = (num1) => (num2) => num1 + num2 + 5;

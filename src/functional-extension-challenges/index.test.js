@@ -1,4 +1,11 @@
-import { functionValidator, allClear } from './index';
+import {
+  functionValidator,
+  allClear,
+  numSelectString,
+  movieSelector,
+  curriedAddThreeNums,
+  curriedAddTwoNumsToFive,
+} from './index';
 
 describe('functionValidator', () => {
   it('should return an array with the function that, after been called with the input argument, the result is equal the output argument', () => {
@@ -25,5 +32,46 @@ describe('allClear', () => {
 
     expect(result1).toBe(true);
     expect(result2).toBe(false);
+  });
+});
+
+describe('numSelectString', () => {
+  it('should return the odd numbers in ascending order in a string when the argument is an array of numbers', () => {
+    const nums = [17, 34, 3, 12];
+
+    const result = numSelectString(nums);
+
+    expect(result).toBe('3, 17');
+  });
+});
+
+describe('movieSelector', () => {
+  it('should return the movies titles that the score is higher than 5, the title should be uppercase', () => {
+    const movies = [
+      { id: 1, title: "Pan's Labyrinth", score: 9 },
+      { id: 37, title: 'Manos: The Hands of Fate', score: 2 },
+      { title: 'Air Bud', score: 5 },
+      { title: 'Hackers', score: 7 },
+    ];
+
+    const result = movieSelector(movies);
+
+    expect(result).toEqual(["PAN'S LABYRINTH", 'HACKERS']);
+  });
+});
+
+describe('curriedAddThreeNums', () => {
+  it('should return sum of the three curried functions arguments', () => {
+    const result = curriedAddThreeNums(3)(-1)(1);
+
+    expect(result).toBe(3);
+  });
+});
+
+describe('curriedAddTwoNumsToFive', () => {
+  it('should return sum of the two curried functions argument + 5', () => {
+    const result = curriedAddTwoNumsToFive(6)(7);
+
+    expect(result).toBe(18);
   });
 });
